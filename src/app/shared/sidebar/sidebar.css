@@ -1,0 +1,43 @@
+.sidebar {
+  width: 220px;
+  height: 100vh;
+  background: #1e293b;
+  color: #fff;
+  position: fixed;
+}
+
+.menu-item {
+  padding: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.menu-item:hover,
+.menu-item.active {
+  background: #334155;
+}
+
+.submenu {
+  background: #0f172a;
+}
+
+.submenu li {
+  padding: 10px 30px;
+}
+
+.submenu li a {
+  color: #cbd5f5;
+  text-decoration: none;
+  display: block;
+}
+
+.submenu li.active,
+.submenu li:hover {
+  background: #1e293b;
+}
+
+.arrow {
+  font-size: 14px;
+}

@@ -1,0 +1,28 @@
+<nav class="sidebar">
+  <ul>
+    <li *ngFor="let item of menuItems">
+
+      <!-- Main Menu -->
+      <div
+        class="menu-item"
+        (click)="item.children ? toggleMenu(item.label) : null"
+        [routerLink]="!item.children ? item.route : null"
+        routerLinkActive="active"
+      >
+        <span class="icon">{{ item.icon }}</span>
+        <span>{{ item.label }}</span>
+        <span class="arrow" *ngIf="item.children">
+          {{ expandedMenu === item.label ? '▾' : '▸' }}
+        </span>
+      </div>
+
+      <!-- Sub Menu -->
+      <ul class="submenu" *ngIf="item.children && expandedMenu === item.label">
+        <li *ngFor="let sub of item.children" routerLinkActive="active">
+          <a [routerLink]="sub.route">{{ sub.label }}</a>
+        </li>
+      </ul>
+
+    </li>
+  </ul>
+</nav>
