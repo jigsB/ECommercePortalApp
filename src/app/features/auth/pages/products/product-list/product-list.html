@@ -1,1 +1,15 @@
-<p>product-list works!</p>
+<h3>Product List</h3>
+
+<table border="1" width="100%">
+  <tr>
+    <th>Name</th>
+    <th>Price</th>
+    <th>Stock</th>
+  </tr>
+
+  <tr *ngFor="let p of products">
+    <td>{{ p.productName }}</td>
+    <td>{{ p.price }}</td>
+    <td>{{ p.stockQuantity }}</td>
+  </tr>
+</table>
