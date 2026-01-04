@@ -54,23 +54,23 @@ export class Register {
       fullName: this.fullName?.value,
       email: this.email?.value,
       password: this.password?.value, // backend will hash
-      roleId: this.roleId?.value
+      roleId: parseInt(this.roleId?.value)
     };
 
     console.log('Signup payload:', payload);
 
     // TODO: Call GraphQL Signup Mutation
-    this.auth.register(this.signupForm.value).subscribe({
-      next: () => this.router.navigate(['/products']),
-      error: err => {
+    this.auth.createUser(payload).subscribe({
+
+      next: () => {
+        this.router.navigate(['/products'])
+        alert('Signup successful');
+      },
+      error: err=> {
         err.message;
+        alert(err.message);
       }
     });
-    // setTimeout(() => {
-    //   this.isSubmitting = false;
-    //   alert('Signup successful (mock)');
-    //  this.router.navigate(['/products']);
-    // }, 1000);
   }
 }
 

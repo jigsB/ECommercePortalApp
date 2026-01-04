@@ -12,11 +12,6 @@ import { RouterModule } from '@angular/router';
 export class Sidebar {
 menuItems = [
     {
-      label: 'Dashboard',
-      icon: '🏠',
-      route: '/dashboard'
-    },
-    {
       label: 'Products',
       icon: '📦',
       children: [
