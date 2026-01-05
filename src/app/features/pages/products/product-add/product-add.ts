@@ -38,13 +38,11 @@ export class ProductAdd implements OnInit{
     this.loading = true;
     this.errorMessage = '';
   const payload = {
-    input: {
       productName: this.productForm.value.productName,
       description: this.productForm.value.description,
       price: Number(this.productForm.value.price),
       stockQuantity: Number(this.productForm.value.stockQuantity),
       productOwnerId : this.user.userId
-    }
   };
     this.productService.addProduct(payload)
       .subscribe({

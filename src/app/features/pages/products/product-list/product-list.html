@@ -1,15 +1,26 @@
 <h3>Product List</h3>
 
-<table border="1" width="100%">
+<table *ngIf="products.length > 0" border="1" width="100%">
   <tr>
+    <th hidden>Id</th>
     <th>Name</th>
     <th>Price</th>
     <th>Stock</th>
+    <th *ngIf="user?.RoleName === 'Buyer'">Action</th>
   </tr>
 
   <tr *ngFor="let p of products">
+    <td hidden>{{ p.productId }}</td>
     <td>{{ p.productName }}</td>
     <td>{{ p.price }}</td>
     <td>{{ p.stockQuantity }}</td>
+    <td>
+      <button *ngIf=" user?.RoleName === 'Buyer' && p.stockQuantity > 0"
+              (click)="addToCart(p)">
+        Add to Cart
+      </button>
+    </td>
+
   </tr>
 </table>
+<p *ngIf="products.length === 0">No products found</p>
