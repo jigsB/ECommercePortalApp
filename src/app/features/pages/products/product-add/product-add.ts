@@ -1,6 +1,8 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { Products } from '../../../../core/services/products';
+import { Auth } from '../../../../core/services/auth';
 @Component({
   selector: 'app-product-add',
   standalone: true,
@@ -8,10 +10,14 @@ import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angula
   templateUrl: './product-add.html',
   styleUrl: './product-add.css',
 })
-export class ProductAdd {
-productForm: FormGroup;
+export class ProductAdd implements OnInit{
+  loading = false;
+  errorMessage = '';
 
-  constructor(private fb: FormBuilder) {
+
+  productForm: FormGroup;
+  user: any; 
+  constructor(private fb: FormBuilder, private productService: Products,private authService: Auth) {
     this.productForm = this.fb.group({
       productName: ['', [Validators.required, Validators.maxLength(200)]],
       description: [''],
@@ -19,13 +25,38 @@ productForm: FormGroup;
       stockQuantity: [0, [Validators.required, Validators.min(0)]]
     });
   }
+  ngOnInit(): void {
+     this.user = this.authService.getUser(); // ✅ assign value
+  }
 
   submit() {
-    if (this.productForm.invalid) return;
+    if (this.productForm.invalid) {
+      this.productForm.markAllAsTouched();
+      return;
+    }
 
-    const product = this.productForm.value;
-    console.log('Product Data:', product);
-
-    // TODO: Call GraphQL mutation here
+    this.loading = true;
+    this.errorMessage = '';
+  const payload = {
+    input: {
+      productName: this.productForm.value.productName,
+      description: this.productForm.value.description,
+      price: Number(this.productForm.value.price),
+      stockQuantity: Number(this.productForm.value.stockQuantity),
+      productOwnerId : this.user.userId
+    }
+  };
+    this.productService.addProduct(payload)
+      .subscribe({
+        next: () => {
+          this.loading = false;
+          this.productForm.reset();
+          alert('Product added successfully');
+        },
+        error: (err) => {
+          this.loading = false;
+          this.errorMessage = err.message || 'Something went wrong';
+        }
+      });
   }
 }
