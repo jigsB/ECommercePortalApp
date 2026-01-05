@@ -1,9 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 import { Login  } from './pages/login/login';
-import { Register } from './pages/register/register';
-import { ProductList } from './pages/products/product-list/product-list';
-import { ProductAdd } from './pages/products/product-add/product-add';
+import { Register } from './pages/register/register';import { ProductList } from '../pages/products/product-list/product-list';
+import { ProductAdd } from '../pages/products/product-add/product-add';
 import { AuthLayout } from '../../layout/auth-layout/auth-layout';
 import { MainLayout } from '../../layout/main-layout/main-layout';
 
@@ -52,5 +51,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AuthRoutingModule {}
-
 

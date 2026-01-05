@@ -1,6 +1,8 @@
 <nav class="sidebar">
   <ul>
-    <li *ngFor="let item of menuItems">
+    <li><span class="user-info">Welcome, {{ user?.fullName }}</span></li>
+    <ng-container *ngFor="let item of menuItems">
+  <li *ngIf="hasAccess(item.roles)">
 
       <!-- Main Menu -->
       <div
@@ -24,5 +26,6 @@
       </ul>
 
     </li>
+    </ng-container>
   </ul>
 </nav>

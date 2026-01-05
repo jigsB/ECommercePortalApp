@@ -1,7 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators, ReactiveFormsModule } from '@angular/forms';
-import { RouterModule } from '@angular/router';
+import { Router, RouterModule } from '@angular/router';
+import { Auth } from '../../../../core/services/auth';
 @Component({
   selector: 'app-login',
    standalone: true,
@@ -18,12 +19,17 @@ export class Login {
 loginForm: FormGroup;
   isSubmitting = false;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder,
+    private authService: Auth,
+    private router: Router) {
     this.loginForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       password: ['', [Validators.required, Validators.minLength(6)]]
     });
   }
+
+  loading = false;
+  error = '';
 
   onSubmit(): void {
     if (this.loginForm.invalid) {
@@ -33,15 +39,23 @@ loginForm: FormGroup;
 
     this.isSubmitting = true;
     const { email, password } = this.loginForm.value;
+   const payload = {
+      email: this.email?.value,
+      password: this.password?.value, // backend will hash
+    };
 
-    console.log('Login request:', { email, password });
-
-    // TODO: Call GraphQL login API here
-
-    setTimeout(() => {
-      this.isSubmitting = false;
-      alert('Login successful (mock)');
-    }, 1000);
+    this.authService.login(payload)
+      .subscribe({
+        next: () => {
+          // ✅ Redirect after successful login
+          this.router.navigate(['/products']);
+        },
+        error: err => {
+          this.error = err.message || 'Login failed';
+          this.loading = false;
+          this.isSubmitting = false;
+        }
+      });
   }
 
  

@@ -1,7 +1,8 @@
-import { Injectable, map } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { Apollo } from 'apollo-angular';
 import { REGISTER_MUTATION } from '../../graphql/mutations/register.mutation';
 import { LOGIN_MUTATION } from '../../graphql/mutations/login.mutation';
+import { map } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -19,10 +20,10 @@ export class Auth {
       variables: { input }
     });
   }
-  login(email: string, password: string) {
+  login(input: any) {
     return this.apollo.mutate<any>({
       mutation: LOGIN_MUTATION,
-      variables: { email, password }
+      variables: { input }
     }).pipe(
       map(result => {
         const loginData = result.data.login;
