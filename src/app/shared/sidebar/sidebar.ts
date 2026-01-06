@@ -46,4 +46,8 @@ menuItems = [
   toggleMenu(label: string) {
     this.expandedMenu = this.expandedMenu === label ? null : label;
   }
+
+    logout() {
+    this.authService.logout();
+  }
 }

@@ -3,6 +3,7 @@ import { Apollo } from 'apollo-angular';
 import { REGISTER_MUTATION } from '../../graphql/mutations/register.mutation';
 import { LOGIN_MUTATION } from '../../graphql/mutations/login.mutation';
 import { map } from 'rxjs';
+import { Router } from '@angular/router';
 
 @Injectable({
   providedIn: 'root',
@@ -12,13 +13,23 @@ export class Auth {
   private readonly TOKEN_KEY = 'auth_token';
   private readonly USER_KEY = 'auth_user';
 
-  constructor(private apollo: Apollo) {}
+  constructor(private apollo: Apollo,private router: Router) {}
 
   createUser(input: any) {
-    return this.apollo.mutate({
+    return this.apollo.mutate<any>({
       mutation: REGISTER_MUTATION,
       variables: { input }
-    });
+    }).pipe(
+      map(result => {
+        
+        const registerData = result.data.createUser;
+        // ✅ Save to localStorage
+        localStorage.setItem(this.TOKEN_KEY, registerData.token);
+        localStorage.setItem(this.USER_KEY, JSON.stringify(registerData.user));
+
+        return registerData;
+      })
+    );
   }
   login(input: any) {
     return this.apollo.mutate<any>({
@@ -40,6 +51,7 @@ export class Auth {
   logout() {
     localStorage.removeItem(this.TOKEN_KEY);
     localStorage.removeItem(this.USER_KEY);
+    this.router.navigate(['/login']);
     this.apollo.client.resetStore();
   }
 

@@ -19,7 +19,7 @@ export class Products implements OnInit {
     }).valueChanges;
   }
 
-  getOwnersProducts() {
+  getOwnersProducts(ownerId: string) {
     return this.apollo.watchQuery({
       query: GET_PRODUCTS
     }).valueChanges;

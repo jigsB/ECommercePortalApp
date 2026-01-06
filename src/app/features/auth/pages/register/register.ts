@@ -67,6 +67,7 @@ export class Register {
         alert('Signup successful');
       },
       error: err=> {
+        this.isSubmitting = false;
         err.message;
         alert(err.message);
       }

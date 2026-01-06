@@ -13,17 +13,33 @@ import { Auth } from '../../../../core/services/auth';
 export class ProductList implements OnInit {
   user: any; 
   products: any[] = [];
-  constructor(private productService: Products, private authService: Auth) {
-    this.productService.getOwnersProducts().subscribe((res: any) => {
-      if (!res.loading && res.data) {
-        this.products = res.data.products;
-      }
-    });
-  }
+  constructor(private productService: Products, private authService: Auth) {}
 
   ngOnInit(): void {
     this.user = this.authService.getUser(); // ✅ assign value
+    this.getProducts();
+}
+
+  getProducts(){
+    if(this.user.role === 'Buyer'){
+  this.productService.getAllProducts().subscribe(({ data, loading }: any) => {
+    if (!loading && data?.allProducts) {
+      this.products = [...data.allProducts]; // force change detection
+    }
+  });
+}
+else if(this.user.role === 'StoreOwner'){
+  this.productService.getOwnersProducts(this.user.userId).subscribe(({ data, loading }: any) => {
+    if (!loading && data?.allProducts) {
+      this.products = [...data.allProducts]; // force change detection
+    }
+  });
+}
+else{
+  this.products = [];
+}
   }
+
   addToCart(product: any) {
     if (!product || product.stockQuantity <= 0) {
       return;
